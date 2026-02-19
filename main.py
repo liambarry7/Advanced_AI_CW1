@@ -7,7 +7,10 @@ print("Hello World!")
     Task 1:
         Preproccessing:
             - apply NLP to preprocess dataset, not limiting to syntactic analysis
+                - stemming, lemmatization, stop word removal, ner, pos
             - transform text into numerical representations (e.g. feature vectors)
+                - get numeric values for each syntactic analysis part, then add into one singluar array in numerical form
+                - https://www.geeksforgeeks.org/nlp/vectorization-techniques-in-nlp/
             - experiment with different approaches, assess impact and select most suitable approach
         
         Dataset split:

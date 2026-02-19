@@ -1,6 +1,8 @@
 import pandas as pd
 import spacy
 import spacy.cli
+from nltk.stem import PorterStemmer
+
 # spacy.cli.download("en_core_web_sm")
 nlp = spacy.load('en_core_web_sm')
 
@@ -30,15 +32,24 @@ def tokenization(text):
     tokens = []
     sentences = sentence_segmentation(text)
     for sent in sentences:
-        doc = nlp(sent.lower())
+        doc = nlp(sent.lower().strip()) # format all text to lowercase and remove whitespaces
         for token in doc:
             tokens.append(token.text)
 
     return ' '.join(tokens)
 
 
-def part_of_speech():
-    pass
+def part_of_speech(text):
+    tokens = []
+    doc = nlp(text)
+    for token in doc:
+        print(
+            f"{str(token.text):15}"
+            f"{str(token.pos_):8}"
+            f"{str(token.tag_):6}"
+            f"{str(spacy.explain(token.tag_))}"
+        )
+
 
 def stop_word_removal(text):
     tokens = []
@@ -65,13 +76,29 @@ def lemmatization(text):
     doc = nlp(text)
     for token in doc:
         print(f"{token.text} : {token.lemma_}")
+        tokens.append(token.lemma_)
 
+    return ' '.join(tokens)
 
-def stemming():
-    pass
+def stemming(text):
+    tokens = []
+    doc = nlp(text)
+    ps = PorterStemmer()
+    for token in doc:
+        print(f"{token.text} : {ps.stem(token.text)}")
+        tokens.append(ps.stem(token.text))
 
-def named_entity_recognition():
-    pass
+    return ' '.join(tokens)
+
+def named_entity_recognition(text):
+    token = []
+    doc = nlp(text)
+    for ent in doc.ents:
+        print(
+            f"{str(ent.text):20}",
+            f"{str(ent.label_):8}",
+            f"{str(spacy.explain(ent.label_))}"
+        )
 
 
 
@@ -102,8 +129,15 @@ def test():
     tokens = remove_punc(tokens)
     print(tokens)
 
-    lemmatization(tokens)
+    tokens_lem = lemmatization(tokens)
+    print(tokens_lem)
 
+    tokens_stem = stemming(tokens)
+    print(tokens_stem)
+
+    pos = part_of_speech(tokens)
+
+    ner = named_entity_recognition(tokens)
 
 if __name__ == "__main__":
     test()
